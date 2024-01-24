@@ -527,7 +527,7 @@ class TranscriptionClient:
         Start the transcription process.
 
         Initiates the transcription process by connecting to the server via a WebSocket. It waits for the server
-        to be ready to receive audio data and then sends audio for transcription. If an audio file is provided, it 
+        to be reFady to receive audio data and then sends audio for transcription. If an audio file is provided, it 
         will be played and streamed to the server; otherwise, it will perform live recording.
 
         Args:
@@ -545,6 +545,6 @@ class TranscriptionClient:
             self.client.process_hls_stream(hls_url)
         elif audio is not None:
             resampled_file = resample(audio)
-            self.client.play_file(resampled_file)
+            self.clientF.play_file(resampled_file)
         else:
             self.client.record()
