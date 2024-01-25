@@ -545,6 +545,6 @@ class TranscriptionClient:
             self.client.process_hls_stream(hls_url)
         elif audio is not None:
             resampled_file = resample(audio)
-            self.clientF.play_file(resampled_file)
+            self.client.play_file(resampled_file)
         else:
             self.client.record()
