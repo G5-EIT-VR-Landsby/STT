@@ -197,8 +197,12 @@ class Client:
             os.system("cls")
         else:
             os.system("clear")
+
+        # TODO: get text here?
         for element in word_list:
             print(element)
+        
+        print(word_list)
 
     def on_error(self, ws, error):
         print(error)

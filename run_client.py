@@ -4,9 +4,8 @@ if __name__ == "__main__":
         "localhost",
         9090,
         is_multilingual=True,
-        lang="en",
+        # lang="en",
         translate=False,
         model="small"
     )
-    client("sample.wav")
-
+    client()
