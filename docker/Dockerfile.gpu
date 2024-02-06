@@ -43,5 +43,9 @@ RUN pip install -r server.txt
 COPY whisper_live /app/whisper_live
 
 COPY run_server.py /app
+COPY nb_huggingface_working.py /app/
+
+RUN mkdir /model
+RUN ["python", "nb_huggingface_working.py"]
 
 CMD ["python", "run_server.py"]
