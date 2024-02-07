@@ -4,3 +4,4 @@ websockets
 onnxruntime==1.16.0
 numba
 scipy
+transformers

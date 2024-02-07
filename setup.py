@@ -42,7 +42,7 @@ setup(name="whisper-live",
       install_requires=[
         "PyAudio",
         "faster-whisper==0.10.0",
-        "torch",
+        "torch",F
         "torchaudio",
         "websockets",
         "onnxruntime",
