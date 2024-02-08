@@ -149,7 +149,9 @@ class TranscriptionServer:
 
         if self.backend == "faster_whisper":
             # validate custom model
-            if faster_whisper_custom_model_path is not None and os.path.exists(faster_whisper_custom_model_path):
+            logging.info(f"hei")
+            logging.info(os.path.exists(faster_whisper_custom_model_path))
+            if faster_whisper_custom_model_path is not None:
                 logging.info(f"Using custom model {faster_whisper_custom_model_path}")
                 options["model"] = faster_whisper_custom_model_path
             client = ServeClientFasterWhisper(
@@ -581,6 +583,9 @@ class ServeClientFasterWhisper(ServeClientBase):
         self.multilingual = multilingual
         if not os.path.exists(model):
             self.model_size_or_path = self.get_model_size(model)
+            
+            if not self.model_size_or_path:
+                self.model_size_or_path = model
         else:
             self.model_size_or_path = model
         self.language = language if self.multilingual else "en"

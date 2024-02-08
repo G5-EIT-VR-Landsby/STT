@@ -43,9 +43,9 @@ RUN pip install -r server.txt
 COPY whisper_live /app/whisper_live
 
 COPY run_server.py /app
-COPY nb_huggingface_working.py /app/
 
 RUN mkdir /model
-RUN ["python", "nb_huggingface_working.py"]
+RUN pip install transformers[torch]>=4.23
+RUN ct2-transformers-converter --model openai/whisper-large-v3 --output_dir ./model/nb-whisper-small-beta-ct2
 
 CMD ["python", "run_server.py"]
