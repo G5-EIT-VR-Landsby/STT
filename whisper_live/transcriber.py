@@ -119,6 +119,7 @@ class WhisperModel:
             local cached file if it exists.
         """
         self.logger = get_logger()
+        self.logger.info(f"{model_size_or_path}, {os.path.isdir(model_size_or_path)}")
 
         if os.path.isdir(model_size_or_path):
             model_path = model_size_or_path
