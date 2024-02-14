@@ -3,3 +3,4 @@ chunks
 __pycache__
 model
 saved_model
+pyrightconfig.json
