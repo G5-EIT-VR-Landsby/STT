@@ -46,6 +46,5 @@ COPY run_server.py /app
 
 RUN mkdir /model
 RUN pip install transformers[torch]>=4.23
-RUN ct2-transformers-converter --model openai/whisper-large-v3 --output_dir ./model/nb-whisper-small-beta-ct2
-
+RUN ct2-transformers-converter --model NbAiLab/nb-whisper-small-beta --output_dir ./model/nb-whisper-small-beta-ct2
 CMD ["python", "run_server.py"]
