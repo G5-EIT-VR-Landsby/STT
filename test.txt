@@ -1,3 +1,3 @@
-hei dette er en test.
+Jeg endrer testen nå.
 
-Dette er bra.
+Dette vil mest sannsynlig fremprovosere noen problemmer. 
