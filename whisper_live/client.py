@@ -11,6 +11,7 @@ import json
 import websocket
 import uuid
 import time
+from queue import Queue
 
 
 def resample(file: str, sr: int = 16000):
@@ -68,7 +69,7 @@ class Client:
         Args:
             host (str): The hostname or IP address of the server.
             port (int): The port number for the WebSocket server.
-            is_multilingual (bool, optional): Specifies if multilingual transcription is enabled. Default is False.
+            is_multilingual (bool, optional): Specifies if multilingual C is enabled. Default is False.
             lang (str, optional): The selected language for transcription when multilingual is disabled. Default is None.
             translate (bool, optional): Specifies if the task is translation. Default is False.
         """
@@ -89,6 +90,7 @@ class Client:
         self.language = lang
         self.model = model
         self.server_error = False
+        self.text_queue = Queue()
 
         if translate:
             self.task = "translate"
@@ -187,10 +189,12 @@ class Client:
                     # already got it
                     continue
                 text.append(seg["text"])
+                self.text_queue.put(seg["text"])
         # keep only last 3
         if len(text) > 3:
             text = text[-3:]
         wrapper = textwrap.TextWrapper(width=60)
+        
         word_list = wrapper.wrap(text="".join(text))
         # Print each line.
         if os.name == "nt":
@@ -199,10 +203,9 @@ class Client:
             os.system("clear")
 
         # TODO: get text here?
-        for element in word_list:
-            print(element)
         
-        print(word_list)
+    def getQueue(self):
+        return self.promptQueue.get()    
 
     def on_error(self, ws, error):
         print(error)
@@ -516,6 +519,10 @@ class TranscriptionClient:
         transcription_client()
         ```
     """
+    
+
+    
+
     def __init__(self,
         host,
         port,
@@ -552,3 +559,11 @@ class TranscriptionClient:
             self.client.play_file(resampled_file)
         else:
             self.client.record()
+
+
+    def update_cum_list():
+        cumulative_list = []
+        while True:
+            cumulative_list.extend(word_list)
+
+    

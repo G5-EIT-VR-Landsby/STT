@@ -149,8 +149,7 @@ class TranscriptionServer:
 
         if self.backend == "faster_whisper":
             # validate custom model
-            logging.info(f"hei")
-            logging.info(os.path.exists(faster_whisper_custom_model_path))
+            
             if faster_whisper_custom_model_path is not None:
                 logging.info(f"Using custom model {faster_whisper_custom_model_path}")
                 options["model"] = faster_whisper_custom_model_path
