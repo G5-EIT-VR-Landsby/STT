@@ -18,6 +18,8 @@ This module uses WhisperLive (https://github.com/collabora/WhisperLive) package 
 
 ## Running server
 ### With Docker
+To run it with the Norwegian model add a `-fw ./model/nb-whisper-small-beta-ct2` at `docker run`
+
 #### GPU (recommended):
   ```
   docker build . -t whisper-live -f docker/Dockerfile.gpu
@@ -40,3 +42,23 @@ python run_server.py --port 9090 \
 ```
 python run_client.py
 ```
+
+To change the global model that has been used, change the `model` parameter in the file when instantiating `TranscriptionClient`.
+
+## Build the Norwegian model locally
+Run these commands in the terminal.
+```
+mkdir /model
+pip install transformers[torch]>=4.23
+ct2-transformers-converter --model NbAiLab/nb-whisper-small-beta --output_dir ./model/nb-whisper-small-beta-ct2
+```
+
+Also possible to change out `NbAiLab/nb-whisper-small-beta` with other sizes. The format will then be `NbAiLab/nb-whisper-{SIZE}-beta` and the available sizes are:
+
+- tiny
+- base
+- small
+- medium
+- large
+
+For more information: https://huggingface.co/NbAiLab/nb-whisper-base
