@@ -2,7 +2,7 @@ from whisper_live.client import TranscriptionClient
 import threading    
 from queue import Queue
 import time
-import keyboard
+# import keyboard
 
 
 
@@ -22,24 +22,13 @@ if __name__ == "__main__":
     def start_client():
         client()         
 
-    def record():
-        recordToQueue = False
-        listToQueue = []
-
+    def get_prompt():
         while True:
-            if keyboard.is_pressed('1'):
-                recordToQueue = True
-            elif keyboard.is_pressed('0'):
-                recordToQueue = False
+            prompt = client.client.get_prompt()
+            if prompt:
+                print(prompt)
 
-            if recordToQueue:
-                listToQueue = listToQueue.append(client.client.getQueue())
-            elif not recordToQueue and not hasSent:
-                queueToSend.put("".join(listToQueue))
-                listToQueue = []
-                hasSent = True    
-
-    thread_functions = [start_client, record]
+    thread_functions = [start_client, get_prompt]
 
     threads = []
     for func in thread_functions:

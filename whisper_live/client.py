@@ -90,9 +90,8 @@ class Client:
         self.language = lang
         self.model = model
         self.server_error = False
-        self.text_queue = Queue()
-        self.test_list = []
-        self.sentence_list = []
+        self.prompt_queue = Queue()
+        self.sequence_list = []
 
         if translate:
             self.task = "translate"
@@ -185,46 +184,27 @@ class Client:
 
         message = message["segments"]
         text = []
+
         if len(message):
             for seg in message:
                 if text and text[-1] == seg["text"]:
                     # already got it
                     continue
                 text.append(seg["text"])
-                self.text_queue.put(seg["text"])
-        # keep only last 3
-        print("Text: ", text)
-        if len(self.test_list) > 1 and len(self.test_list[-1]) != 0 and len(text) == 0:
-            print("TEST", self.test_list[-1], len(self.test_list[-1]))
-            merged_transcription = ' '.join(self.test_list[-2])
-            self.sentence_list.append(merged_transcription)
-            self.test_list = []
-            print("Merged Transcription:", merged_transcription)
+                
+        if len(self.sequence_list) > 1 and len(self.sequence_list[-1]) != 0 and len(text) == 0:
+            merged_transcription = ' '.join(self.sequence_list[-2])
+            self.prompt_queue.put(merged_transcription)
+            self.sequence_list = []
         else:
-            self.test_list.append(text)
-
-        print("SENTENCE LIST", self.sentence_list)
-        # if len(text) > 3:
-        #     text = text[-3:]
-        wrapper = textwrap.TextWrapper(width=60)
+            self.sequence_list.append(text)
         
-        word_list = wrapper.wrap(text="".join(text))
-        # Print each line.
-        if os.name == "nt":
-            os.system("cls")
-        else:
-            os.system("clear")
-
-        # TODO: get text here?
-        # if not only keep last 3 what do we get then
-        # can check start and end of text compare previous text with current to see if its similar if it is similar then it means finished? then put it in queue
-        # join this
-        
-        for element in word_list:
-            print(element)
-        
-    def getQueue(self):
-        return self.promptQueue.get()    
+    def get_prompt(self):
+        try:
+            prompt = self.prompt_queue.get(block=False)  # Get an item without blocking
+        except:
+            prompt = None  # Return None if the queue is empty
+        return prompt
 
     def on_error(self, ws, error):
         print(error)

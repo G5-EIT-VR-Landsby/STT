@@ -704,10 +704,6 @@ class ServeClientFasterWhisper(ServeClientBase):
                     self.t_start = None
                     last_segment = self.update_segments(result, duration)
                     segments = self.transcript
-                    # if len(self.transcript) < self.send_last_n_segments:
-                    #     segments = self.transcript
-                    # else:
-                    #     segments = self.transcript[-self.send_last_n_segments:]
                     if last_segment is not None:
                         segments = segments + [last_segment]                    
                 else:
@@ -715,14 +711,9 @@ class ServeClientFasterWhisper(ServeClientBase):
                     segments = []
                     if self.t_start is None: self.t_start = time.time()
                     if time.time() - self.t_start < self.show_prev_out_thresh:
-
                         segments = self.transcript
-                        # if len(self.transcript) < self.send_last_n_segments:
-                        #     segments = self.transcript
-                        # else:
-                        #     segments = self.transcript[-self.send_last_n_segments:]
                     
-                    # add a blank if there is no speech for 3 seconds
+                    # add a blank if there is no speech for X seconds
                     if len(self.text) and self.text[-1] != '':
                         if time.time() - self.t_start > self.add_pause_thresh:
                             segments = []
