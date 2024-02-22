@@ -91,6 +91,8 @@ class Client:
         self.model = model
         self.server_error = False
         self.text_queue = Queue()
+        self.test_list = []
+        self.sentence_list = []
 
         if translate:
             self.task = "translate"
@@ -191,8 +193,19 @@ class Client:
                 text.append(seg["text"])
                 self.text_queue.put(seg["text"])
         # keep only last 3
-        if len(text) > 3:
-            text = text[-3:]
+        print("Text: ", text)
+        if len(self.test_list) > 1 and len(self.test_list[-1]) != 0 and len(text) == 0:
+            print("TEST", self.test_list[-1], len(self.test_list[-1]))
+            merged_transcription = ' '.join(self.test_list[-2])
+            self.sentence_list.append(merged_transcription)
+            self.test_list = []
+            print("Merged Transcription:", merged_transcription)
+        else:
+            self.test_list.append(text)
+
+        print("SENTENCE LIST", self.sentence_list)
+        # if len(text) > 3:
+        #     text = text[-3:]
         wrapper = textwrap.TextWrapper(width=60)
         
         word_list = wrapper.wrap(text="".join(text))
@@ -203,6 +216,12 @@ class Client:
             os.system("clear")
 
         # TODO: get text here?
+        # if not only keep last 3 what do we get then
+        # can check start and end of text compare previous text with current to see if its similar if it is similar then it means finished? then put it in queue
+        # join this
+        
+        for element in word_list:
+            print(element)
         
     def getQueue(self):
         return self.promptQueue.get()    

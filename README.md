@@ -31,8 +31,12 @@ docker run -it -p 9090:9090 whisper-live:latest
 
 ### Locally
 ```
+<<<<<<< HEAD
 python run_server.py --port 9090 \
                       --backend faster_whisper
+=======
+python run_server.py
+>>>>>>> 54996cd6a1e34c7b9b69c3f6cb64e2c05614c89f
 ```
 
 ## Running client
