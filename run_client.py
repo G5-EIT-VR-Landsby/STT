@@ -1,10 +1,6 @@
 from whisper_live.client import TranscriptionClient
 import threading    
 from queue import Queue
-import time
-# import keyboard
-
-
 
 if __name__ == "__main__":
     
@@ -12,7 +8,7 @@ if __name__ == "__main__":
         "localhost",
         9090,
         is_multilingual=True,
-        lang="en",
+        # lang="en",
         translate=False,
         model="small"
     )
@@ -35,13 +31,3 @@ if __name__ == "__main__":
         thread = threading.Thread(target=func)
         threads.append(thread)
         thread.start()
-
-
-
-
-    
-
-    
-
-
-
