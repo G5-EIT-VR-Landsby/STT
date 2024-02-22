@@ -149,8 +149,6 @@ class TranscriptionServer:
 
         if self.backend == "faster_whisper":
             # validate custom model
-            logging.info(f"hei")
-            logging.info(os.path.exists(faster_whisper_custom_model_path))
             if faster_whisper_custom_model_path is not None:
                 logging.info(f"Using custom model {faster_whisper_custom_model_path}")
                 options["model"] = faster_whisper_custom_model_path
@@ -263,9 +261,9 @@ class ServeClientBase(object):
         self.exit = False
         self.same_output_threshold = 0
         self.show_prev_out_thresh = 5   # if pause(no output from whisper) show previous output for 5 seconds
-        self.add_pause_thresh = 3       # add a blank to segment list as a pause(no speech) for 3 seconds
+        self.add_pause_thresh = 2       # add a blank to segment list as a pause(no speech) for 2 seconds
         self.transcript = []
-        self.send_last_n_segments = 10
+        self.send_last_n_segments = 20
 
         # text formatting
         self.wrapper = textwrap.TextWrapper(width=50)
@@ -705,10 +703,11 @@ class ServeClientFasterWhisper(ServeClientBase):
                 if len(result):
                     self.t_start = None
                     last_segment = self.update_segments(result, duration)
-                    if len(self.transcript) < self.send_last_n_segments:
-                        segments = self.transcript
-                    else:
-                        segments = self.transcript[-self.send_last_n_segments:]
+                    segments = self.transcript
+                    # if len(self.transcript) < self.send_last_n_segments:
+                    #     segments = self.transcript
+                    # else:
+                    #     segments = self.transcript[-self.send_last_n_segments:]
                     if last_segment is not None:
                         segments = segments + [last_segment]                    
                 else:
@@ -716,14 +715,18 @@ class ServeClientFasterWhisper(ServeClientBase):
                     segments = []
                     if self.t_start is None: self.t_start = time.time()
                     if time.time() - self.t_start < self.show_prev_out_thresh:
-                        if len(self.transcript) < self.send_last_n_segments:
-                            segments = self.transcript
-                        else:
-                            segments = self.transcript[-self.send_last_n_segments:]
+
+                        segments = self.transcript
+                        # if len(self.transcript) < self.send_last_n_segments:
+                        #     segments = self.transcript
+                        # else:
+                        #     segments = self.transcript[-self.send_last_n_segments:]
                     
                     # add a blank if there is no speech for 3 seconds
                     if len(self.text) and self.text[-1] != '':
                         if time.time() - self.t_start > self.add_pause_thresh:
+                            segments = []
+                            self.transcript = []
                             self.text.append('')
 
                 try:
