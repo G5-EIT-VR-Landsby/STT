@@ -20,6 +20,11 @@ This module uses WhisperLive (https://github.com/collabora/WhisperLive) package 
 ### With Docker
 To run it with the Norwegian model add a `-fw ./model/nb-whisper-small-beta-ct2` at `docker run`
 
+NOTE: might have been some update in the docker but cannot make it to run with the GPU command as below. Current working command is:
+```
+docker run -it --gpus all -p 9090:9090 whisper-live:latest python run_server.py -fw  ./model/nb-whisper-small-beta-ct2
+```
+
 #### GPU (recommended):
   ```
   docker build . -t whisper-live -f docker/Dockerfile.gpu
